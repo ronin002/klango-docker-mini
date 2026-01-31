@@ -1,0 +1,13 @@
+# Estágio de Runtime
+FROM mcr.microsoft.com/dotnet/runtime:8.0-jammy-slim
+
+# Mantém o sistema atualizado e instala dependências mínimas do Ubuntu
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+# Sua aplicação .NET entraria aqui
+# COPY ./publish .
+
+ENTRYPOINT ["dotnet", "SuaApp.dll"]
