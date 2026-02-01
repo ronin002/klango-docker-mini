@@ -22,3 +22,5 @@ COPY --from=build /app/out .
 
 # Como o nome do projeto no 'dotnet new' foi TesteBuild, a DLL será TesteBuild.dll
 ENTRYPOINT ["dotnet", "TesteBuild.dll"]
+
+CMD ["sleep", "infinity"]
