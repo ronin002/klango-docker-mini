@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "name": "klango-docker-mini",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ronin002/klango-docker-mini.git"
+  },
+  "author": "Edson Marcio de Oliveira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ronin002/klango-docker-mini/issues"
+  },
+  "homepage": "https://github.com/ronin002/klango-docker-mini#readme"
+}
