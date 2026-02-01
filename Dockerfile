@@ -1,5 +1,5 @@
 # Usamos o SDK para poder criar e compilar o projeto
-FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # Limpeza e atualização do sistema
 RUN apt-get update && apt-get upgrade -y && \
@@ -14,7 +14,7 @@ RUN dotnet new console -n TesteBuild && \
     dotnet publish -c Release -o out TesteBuild/TesteBuild.csproj
 
 # Estágio Final: Usa a imagem leve (runtime) para rodar
-FROM mcr.microsoft.com/dotnet/runtime:8.0-jammy-slim
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 # Copia apenas o resultado da compilação do estágio anterior
