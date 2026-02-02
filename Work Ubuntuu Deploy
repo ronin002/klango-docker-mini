@@ -1,0 +1,29 @@
+
+
+
+# Atualize para a versão 20 para ter suporte nativo ao global fetch
+FROM node:20-slim
+
+# Configure o diretório de trabalho
+WORKDIR /app
+
+# Copie apenas os arquivos de dependências primeiro (otimiza o cache do Docker)
+COPY package*.json ./
+
+# Instale as dependências
+RUN npm install
+
+
+ENV KLANGO_PAYLOAD=""
+ENV KLANGO_STATION_ID=""
+ENV USER_ID=""
+ENV PLAN=""
+
+# Copie o restante do código
+COPY . .
+
+# Alinhe a porta com o que está configurado no seu Coolify (estava 3000 nos logs)
+EXPOSE 3000
+
+# Comando para iniciar o aplicativo
+CMD ["npm", "start"]
