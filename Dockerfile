@@ -1,29 +1,37 @@
-
-
-
-# Atualize para a versão 20 para ter suporte nativo ao global fetch
+# Usamos a sua base Node 20
 FROM node:20-slim
 
-# Configure o diretório de trabalho
+# 1. Instala dependências mínimas para rodar o .NET (mesmo Self-Contained) e o curl/unzip
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    libicu-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copie apenas os arquivos de dependências primeiro (otimiza o cache do Docker)
+# 2. Configuração do Node (seu código original)
 COPY package*.json ./
-
-# Instale as dependências
 RUN npm install
+COPY . .
 
+# 3. Download e Preparação do Worker .NET
+# Substitua a URL pelo link real do seu .zip (ex: do GitHub Releases ou S3)
+RUN curl -L -o worker.zip "https://klangorpa.com/workerdownload/klangoRpa-Worker.zip" && \
+    mkdir -p ./dotnet_worker && \
+    unzip worker.zip -d ./dotnet_worker && \
+    chmod +x ./dotnet_worker/KlangoRPAConsole && \
+    rm worker.zip
 
 ENV KLANGO_PAYLOAD=""
 ENV KLANGO_STATION_ID=""
 ENV USER_ID=""
 ENV PLAN=""
 
-# Copie o restante do código
-COPY . .
-
-# Alinhe a porta com o que está configurado no seu Coolify (estava 3000 nos logs)
 EXPOSE 3000
 
-# Comando para iniciar o aplicativo
-CMD ["npm", "start"]
+# 4. Comando para iniciar
+# Se você precisa que AMBOS (Node e .NET) rodem ao mesmo tempo, 
+# você pode usar um script bash ou o operador '&' (mas o bash é mais seguro para logs)
+CMD ./dotnet_worker/KlangoRPAConsole & npm start
