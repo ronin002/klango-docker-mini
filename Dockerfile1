@@ -1,6 +1,3 @@
-
-
-
 # Atualize para a versão 20 para ter suporte nativo ao global fetch
 FROM node:20-slim
 
@@ -12,12 +9,6 @@ COPY package*.json ./
 
 # Instale as dependências
 RUN npm install
-
-
-ENV KLANGO_PAYLOAD=""
-ENV KLANGO_STATION_ID=""
-ENV USER_ID=""
-ENV PLAN=""
 
 # Copie o restante do código
 COPY . .
