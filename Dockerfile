@@ -1,35 +1,34 @@
-FROM node:20-slim
+# Stage 1: Imagem base com Node.js e .NET
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 
-# Força o modo não interativo e tenta rodar o update com mirrors resilientes
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-    curl \
-    unzip \
-    ca-certificates \
-    libicu-dev \
-    libssl-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Instalar Node.js 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs unzip wget
 
 WORKDIR /app
 
-# Configuração do Node
+# Copiar e instalar dependências do Node
 COPY package*.json ./
 RUN npm install
+
+# Copiar código da aplicação Node
 COPY . .
 
-# Download e Extração (substitua pela sua URL real)
-# Adicionei a flag -k no curl caso seu servidor de download tenha SSL autoassinado
-RUN curl -Lk -o worker.zip "https://klangorpa.com/workerdownload/klangoRpa-Worker.zip" && \
-    mkdir -p ./dotnet_worker && \
-    unzip worker.zip -d ./dotnet_worker && \
-    chmod +x ./dotnet_worker/KlangoRPAConsole && \
-    rm worker.zip
+# Variáveis de ambiente
+ENV KLANGO_PAYLOAD=""
+ENV KLANGO_STATION_ID=""
+ENV USER_ID=""
+ENV PLAN=""
+
+# Baixar e extrair o worker
+RUN wget https://klangorpa.com/workerdownload/klangoRpa-Worker.zip -O /tmp/worker.zip && \
+    unzip /tmp/worker.zip -d /app/worker && \
+    rm /tmp/worker.zip
+
+# Tornar o worker executável (se necessário)
+RUN chmod +x /app/worker/* || true
 
 EXPOSE 3000
 
-# Executa ambos os processos
-CMD ./dotnet_worker/KlangoRPAConsole & npm start
-
+# Script de inicialização para rodar ambos os processos
+CMD ["/bin/bash", "-c", "npm start & /app/worker/klangoRpa-Worker"]
