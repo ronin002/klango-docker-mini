@@ -30,10 +30,12 @@ COPY . .
 ENV KLANGO_PAYLOAD=""
 ENV KLANGO_STATION_ID=""
 ENV USER_ID=""
+ENV KLANGO_MID=""
 ENV PLAN=""
 
-# Baixar e extrair o worker
-RUN wget https://klangorpa.com/workerdownload/klangoRpa-Worker.zip -O /tmp/worker.zip && \
+# Baixar e extrair o worker klangorpa-worker-linux-container.zip
+#RUN wget https://klangorpa.com/workerdownload/klangoRpa-Worker.zip -O /tmp/worker.zip && \
+RUN wget https://klangorpa.com/workerdownload/klangorpa-worker-linux-container.zip -O /tmp/worker.zip && \
     unzip /tmp/worker.zip -d /app/worker && \
     rm /tmp/worker.zip && \
     chmod +x /app/worker/publish/KlangoRPAConsole
