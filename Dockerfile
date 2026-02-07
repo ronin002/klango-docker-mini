@@ -52,6 +52,6 @@ CMD ["/bin/bash", "-c", "\
     npm start & \
     sleep 3 && \
     echo '=== Iniciando KlangoRPA Worker ===' && \
-    cd /app/worker/publish && \
+    cd /app/worker/publish-linux && \
     ./KlangoRPAConsole \
 "]
